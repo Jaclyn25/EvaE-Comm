@@ -16,10 +16,10 @@
                 <li><a href="index.html" class="nav-link active">Home</a></li>
                 <li><a href="#contact" class="nav-link">Contact</a></li>
                 <li class="wishlist-icon-wrapper">
-                    <button class="nav-link wishlist-nav-btn" id="openWishlistModal" aria-label="View wishlist">
+                    <a href="wishlist.html" class="nav-link wishlist-nav-btn" aria-label="View wishlist">
                         <i class="fa-solid fa-heart"></i>
                         <span class="wishlist-count" id="wishlistCount">0</span>
-                    </button>
+                    </a>
                 </li>
                 <li class="cart-icon-wrapper">
                     <a href="cart.html" class="nav-link cart-link">
@@ -29,14 +29,7 @@
                         <span class="cart-count" id="cartCount">0</span>
                     </a>
                 </li>
-                    <!-- Wishlist Modal -->
-                    <div id="wishlistModal" class="wishlist-modal" tabindex="-1" aria-modal="true" role="dialog">
-                        <div class="wishlist-modal-content">
-                            <button class="wishlist-modal-close" id="closeWishlistModal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
-                            <h2 class="wishlist-modal-title">My Wishlist</h2>
-                            <div id="wishlistProductsContainer" class="wishlist-products-container"></div>
-                        </div>
-                    </div>
+                    <!-- Wishlist Modal removed: now only available as a separate page -->
                 <li class="nav-auth-slot" id="navAuthSlot">
                     <!-- Login icon (when logged out) or Username + Logout (when logged in) injected by auth.js -->
                 </li>

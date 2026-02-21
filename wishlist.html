@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wishlist</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">ShopHub</a>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+                <li class="wishlist-icon-wrapper">
+                    <a href="wishlist.html" class="nav-link wishlist-nav-btn active" aria-label="View wishlist">
+                        <i class="fa-solid fa-heart"></i>
+                        <span class="wishlist-count" id="wishlistCount">0</span>
+                    </a>
+                </li>
+                <li class="cart-icon-wrapper">
+                    <a href="cart.html" class="nav-link cart-link">
+                        <svg class="cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4m7 14h2a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2M9 7h6M9 7v12m6-12v12M9 7H7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h2M15 7h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-2"/>
+                        </svg>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </a>
+                </li>
+                <li class="nav-auth-slot" id="navAuthSlot"></li>
+            </ul>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+    <main class="wishlist-page-main">
+        <section class="wishlist-section">
+            <h1 class="wishlist-page-title"><i class="fa-solid fa-heart"></i> My Wishlist</h1>
+            <div id="wishlistProductsContainer" class="wishlist-products-container"></div>
+        </section>
+    </main>
+    <script type="module" src="js/wishlist.js"></script>
+</body>
+</html>
