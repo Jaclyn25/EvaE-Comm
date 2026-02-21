@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - E-Commerce</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">ShopHub</a>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+                <li class="cart-icon-wrapper">
+                    <a href="cart.html" class="nav-link cart-link">
+                        <svg class="cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4m7 14h2a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2M9 7h6M9 7v12m6-12v12M9 7H7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h2M15 7h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-2"/>
+                        </svg>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </a>
+                </li>
+                <li class="nav-auth-slot" id="navAuthSlot">
+                    <!-- Injected by auth.js -->
+                </li>
+            </ul>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Product Details -->
+    <section class="product-details-section">
+        <div class="container">
+            <div class="product-details-wrapper" id="productDetails">
+                <!-- Product details will be injected by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/buttonTop.js"></script>
+</body>
+    <!-- Scroll To Top Button -->
+    <button id="scrollTopBtn" class="scroll-top-btn" aria-label="Scroll to top" tabindex="0">
+        <span class="scroll-top-icon" aria-hidden="true">
+            <i class="fa-solid fa-arrow-up"></i>
+        </span>
+    </button>
+</body>
+</html>

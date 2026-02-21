@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - E-Commerce</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon.png">
+    <link rel="shortcut icon" href="favicon.png" type="image/png">
+    <meta name="theme-color" content="#f3f4f6">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="auth-page">
+    <div class="auth-container">
+        <div class="auth-card">
+            <h1 class="auth-title">Create Account</h1>
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <input 
+                        type="text" 
+                        id="registerName" 
+                        name="name" 
+                        placeholder="Full Name" 
+                        required
+                        autocomplete="name"
+                    >
+                    <span class="input-focus-line"></span>
+                    <span class="error-message" id="nameError"></span>
+                </div>
+
+                <div class="form-group">
+                    <input 
+                        type="email" 
+                        id="registerEmail" 
+                        name="email" 
+                        placeholder="Email Address" 
+                        required
+                        autocomplete="email"
+                    >
+                    <span class="input-focus-line"></span>
+                    <span class="error-message" id="emailError"></span>
+                </div>
+
+                <div class="form-group">
+                    <input 
+                        type="password" 
+                        id="registerPassword" 
+                        name="password" 
+                        placeholder="Password" 
+                        required
+                        autocomplete="new-password"
+                    >
+                    <span class="input-focus-line"></span>
+                    <span class="error-message" id="passwordError"></span>
+                </div>
+
+                <div class="form-group">
+                    <input 
+                        type="password" 
+                        id="registerConfirmPassword" 
+                        name="confirmPassword" 
+                        placeholder="Confirm Password" 
+                        required
+                        autocomplete="new-password"
+                    >
+                    <span class="input-focus-line"></span>
+                    <span class="error-message" id="confirmPasswordError"></span>
+                </div>
+
+                <button type="submit" class="auth-submit-btn">
+                    <span>Register</span>
+                    <div class="ripple-effect"></div>
+                </button>
+            </form>
+
+            <p class="auth-footer">
+                Already have an account? <a href="login.html">Login here</a>
+            </p>
+        </div>
+    </div>
+
+    <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/buttonTop.js"></script>
+</body>
+    <!-- Scroll To Top Button -->
+    <button id="scrollTopBtn" class="scroll-top-btn" aria-label="Scroll to top" tabindex="0">
+        <span class="scroll-top-icon" aria-hidden="true">
+            <i class="fa-solid fa-arrow-up"></i>
+        </span>
+    </button>
+</body>
+</html>
