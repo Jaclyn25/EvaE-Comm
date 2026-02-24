@@ -1,3 +1,4 @@
+import { showToast } from './toast.js';
 class CartManager {
     constructor() {
         this.cart = this.loadCart();
@@ -22,23 +23,22 @@ class CartManager {
 
     addItem(product, quantity = 1) {
         const existingItem = this.cart.find(item => item.id === product.id);
-
         if (existingItem) {
             existingItem.quantity += quantity;
+            showToast({ message: `Increased quantity for ${product.name}.`, type: 'info' });
         } else {
-            this.cart.push({
-                ...product,
-                quantity
-            });
+            this.cart.push({ ...product, quantity });
+            showToast({ message: `Added ${product.name} to cart!`, type: 'success' });
         }
-
         this.saveCart();
         this.showAddToCartAnimation();
     }
 
     removeItem(productId) {
+        const item = this.cart.find(i => i.id === productId);
         this.cart = this.cart.filter(item => item.id !== productId);
         this.saveCart();
+        if (item) showToast({ message: `Removed ${item.name} from cart.`, type: 'warning' });
     }
 
     updateQuantity(productId, quantity) {
@@ -49,7 +49,10 @@ class CartManager {
             } else {
                 item.quantity = quantity;
                 this.saveCart();
+                showToast({ message: `Updated quantity for ${item.name}.`, type: 'info' });
             }
+        } else {
+            showToast({ message: 'Item not found in cart.', type: 'error' });
         }
     }
 

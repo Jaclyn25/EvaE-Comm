@@ -14,7 +14,6 @@ function getCurrentUser() {
         return null;
     }
 }
-
 function isAuthenticated() {
     return getCurrentUser() !== null;
 }

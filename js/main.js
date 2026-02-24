@@ -1,7 +1,37 @@
+import { animateSectionTitles } from './sectionTitles.js';
+function handleSplashScreen() {
+    const splash = document.getElementById('splashScreen');
+    if (!splash) return;
+    if (window.sessionStorage.getItem('splashShown')) {
+        splash.parentNode.removeChild(splash);
+        return;
+    }
+    window.sessionStorage.setItem('splashShown', '1');
+    document.body.style.overflow = 'hidden';
+
+    setTimeout(() => {
+        splash.classList.add('fade-out');
+        setTimeout(() => {
+            splash.parentNode.removeChild(splash);
+            document.body.style.overflow = '';
+        }, 600); 
+    }, 1700); 
+}
+
 import CartManager from './cart.js';
 import ProductsManager from './products.js';
 import ImageSlider from './slider.js';
 import AuthUI, { isAuthenticated } from './auth.js';
+import {
+    showLoadingBar,
+    completeLoadingBar,
+    showPageTransition,
+    hidePageTransition,
+    saveScrollPosition,
+    restoreScrollPosition,
+    interceptLinks,
+    onPageLoadTransitions
+} from './ui.js';
 
 const PROTECTED_PATHS = ['cart.html', 'product.html'];
 
@@ -514,10 +544,15 @@ class App {
         });
     }
 }
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        new App();
-    });
-} else {
+function startApp() {
+    handleSplashScreen();
+    onPageLoadTransitions();
+    interceptLinks();
+    animateSectionTitles();
     new App();
+}
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', startApp);
+} else {
+    startApp();
 }
