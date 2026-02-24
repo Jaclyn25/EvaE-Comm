@@ -200,6 +200,8 @@ class ImageSlider {
                 }
             });
         }
+
+        // Pause on hover
         this.container.addEventListener('mouseenter', () => {
             this.stopAutoPlay();
         });
@@ -209,6 +211,8 @@ class ImageSlider {
                 this.startAutoPlay();
             }
         });
+
+        // Touch/swipe support
         let touchStartX = 0;
         let touchEndX = 0;
 
@@ -220,6 +224,8 @@ class ImageSlider {
             touchEndX = e.changedTouches[0].screenX;
             this.handleSwipe();
         });
+
+        // Keyboard navigation
         document.addEventListener('keydown', (e) => {
             if (this.container.contains(document.activeElement) || 
                 document.activeElement === document.body) {

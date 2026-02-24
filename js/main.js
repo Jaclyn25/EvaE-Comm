@@ -1,12 +1,16 @@
-import { animateSectionTitles } from './sectionTitles.js';
+// ===== Splash Screen Logic =====
 function handleSplashScreen() {
     const splash = document.getElementById('splashScreen');
     if (!splash) return;
+
+    // Only show splash on first visit per session
     if (window.sessionStorage.getItem('splashShown')) {
         splash.parentNode.removeChild(splash);
         return;
     }
     window.sessionStorage.setItem('splashShown', '1');
+
+    // Prevent interaction
     document.body.style.overflow = 'hidden';
 
     setTimeout(() => {
@@ -14,24 +18,13 @@ function handleSplashScreen() {
         setTimeout(() => {
             splash.parentNode.removeChild(splash);
             document.body.style.overflow = '';
-        }, 600); 
-    }, 1700); 
+        }, 600); // match CSS transition
+    }, 1700); // 1.7s splash duration
 }
-
 import CartManager from './cart.js';
 import ProductsManager from './products.js';
 import ImageSlider from './slider.js';
 import AuthUI, { isAuthenticated } from './auth.js';
-import {
-    showLoadingBar,
-    completeLoadingBar,
-    showPageTransition,
-    hidePageTransition,
-    saveScrollPosition,
-    restoreScrollPosition,
-    interceptLinks,
-    onPageLoadTransitions
-} from './ui.js';
 
 const PROTECTED_PATHS = ['cart.html', 'product.html'];
 
@@ -67,6 +60,8 @@ class App {
         this.initNavbar();
         this.initPage();
         this.initRippleEffects();
+
+        // Wishlist modal logic
         this.initWishlistModal();
     }
     initWishlistModal() {
@@ -76,6 +71,8 @@ class App {
         const productsContainer = document.getElementById('wishlistProductsContainer');
         const wishlistCount = document.getElementById('wishlistCount');
         const productsManager = this.productsManager;
+
+        // Helper to render wishlist products
         function renderWishlist() {
             const wishlist = productsManager.getWishlist();
             wishlistCount.textContent = wishlist.length;
@@ -101,11 +98,13 @@ class App {
             }).join('');
         }
 
+        // Open modal
         openBtn?.addEventListener('click', () => {
             modal.classList.add('open');
             setTimeout(() => modal.classList.add('visible'), 10);
             renderWishlist();
         });
+        // Close modal
         closeBtn?.addEventListener('click', () => {
             modal.classList.remove('visible');
             setTimeout(() => modal.classList.remove('open'), 250);
@@ -116,6 +115,7 @@ class App {
                 setTimeout(() => modal.classList.remove('open'), 250);
             }
         });
+        // Remove from wishlist
         productsContainer?.addEventListener('click', (e) => {
             const btn = e.target.closest('.wishlist-remove-btn');
             if (!btn) return;
@@ -124,24 +124,32 @@ class App {
             const id = parseInt(card.dataset.productId);
             productsManager.toggleWishlist(id);
             renderWishlist();
+            // Animate navbar heart
             openBtn.classList.add('animated');
             setTimeout(() => openBtn.classList.remove('animated'), 500);
         });
+
+        // Update count on page load and whenever wishlist changes
         function updateWishlistCount() {
             const wishlist = productsManager.getWishlist();
             wishlistCount.textContent = wishlist.length;
         }
         updateWishlistCount();
+
+        // Listen for storage changes (multi-tab)
         window.addEventListener('storage', (e) => {
             if (e.key === 'wishlist') {
                 renderWishlist();
                 updateWishlistCount();
             }
         });
+
+        // Patch wishlist heart toggle to update count and animate
         const origToggle = productsManager.toggleWishlist.bind(productsManager);
         productsManager.toggleWishlist = function(id) {
             origToggle(id);
             updateWishlistCount();
+            // Animate navbar heart
             openBtn.classList.add('animated');
             setTimeout(() => openBtn.classList.remove('animated'), 500);
         };
@@ -155,6 +163,8 @@ class App {
             mobileMenuToggle.classList.toggle('active');
             navMenu?.classList.toggle('active');
         });
+
+        // Close mobile menu when clicking outside
         document.addEventListener('click', (e) => {
             if (!e.target.closest('.navbar')) {
                 mobileMenuToggle?.classList.remove('active');
@@ -178,6 +188,7 @@ class App {
     }
 
     initHomePage() {
+        // Initialize slider
         const sliderContainer = document.getElementById('sliderContainer');
         if (sliderContainer) {
             this.slider = new ImageSlider('sliderContainer', {
@@ -185,20 +196,32 @@ class App {
                 autoPlayDelay: 5000
             });
         }
+
+        // Sidebar filter panel logic
         this.initSidebarFilters();
+
+        // Initialize filters
         this.initFilters();
+
+        // Skeleton loading
         const productsGrid = document.getElementById('productsGrid');
         const skeletonGrid = document.getElementById('skeletonGrid');
         if (skeletonGrid) skeletonGrid.style.display = 'flex';
+
+        // Simulate loading delay, then render products
         setTimeout(() => {
             if (productsGrid) {
                 this.productsManager.renderProducts(productsGrid, this.cartManager);
+                // Add .reveal to product cards
                 productsGrid.querySelectorAll('.product-card').forEach(card => card.classList.add('reveal'));
                 this.initScrollReveal();
             }
             if (skeletonGrid) skeletonGrid.style.display = 'none';
         }, 900);
+
+        // Listen for cart updates to re-render if needed
         document.addEventListener('cartUpdated', () => {
+            // Products are already rendered, just update cart count
         });
     }
 
@@ -220,14 +243,17 @@ class App {
         const openBtn = document.getElementById('openSidebarBtn');
         const closeBtn = document.getElementById('closeSidebarBtn');
         const clearBtn = document.getElementById('clearFiltersBtn');
+        // Open sidebar (mobile)
         openBtn?.addEventListener('click', () => {
             sidebar?.classList.add('open');
             document.body.style.overflow = 'hidden';
         });
+        // Close sidebar (mobile)
         closeBtn?.addEventListener('click', () => {
             sidebar?.classList.remove('open');
             document.body.style.overflow = '';
         });
+        // Close sidebar when clicking outside (mobile)
         document.addEventListener('click', (e) => {
             if (window.innerWidth <= 900 && sidebar?.classList.contains('open')) {
                 if (!e.target.closest('.sidebar-filters') && !e.target.closest('.sidebar-toggle-btn')) {
@@ -236,7 +262,9 @@ class App {
                 }
             }
         });
+        // Clear filters
         clearBtn?.addEventListener('click', () => {
+            // Reset all filters
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelector('.filter-btn[data-category="all"]')?.classList.add('active');
             document.getElementById('priceRange').value = 1000;
@@ -254,6 +282,8 @@ class App {
         const sizeFilter = document.getElementById('sizeFilter');
         const productsGrid = document.getElementById('productsGrid');
         const filterChips = document.getElementById('filterChips');
+
+        // Helper to update chips
         const updateChips = () => {
             const filters = this.productsManager.currentFilters;
             let chips = '';
@@ -268,6 +298,8 @@ class App {
             }
             filterChips.innerHTML = chips;
         };
+
+        // Category filter
         categoryBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 categoryBtns.forEach(b => b.classList.remove('active'));
@@ -278,6 +310,8 @@ class App {
                 updateChips();
             });
         });
+
+        // Price filter
         if (priceRange && priceValue) {
             priceRange.addEventListener('input', (e) => {
                 const maxPrice = parseInt(e.target.value);
@@ -287,12 +321,16 @@ class App {
                 updateChips();
             });
         }
+
+        // Size filter
         sizeFilter?.addEventListener('change', (e) => {
             const size = e.target.value;
             this.productsManager.filterProducts({ size });
             this.productsManager.renderProducts(productsGrid, this.cartManager);
             updateChips();
         });
+
+        // Remove chip
         filterChips.addEventListener('click', (e) => {
             const chip = e.target.closest('.filter-chip');
             if (!chip) return;
@@ -312,6 +350,8 @@ class App {
             this.productsManager.renderProducts(productsGrid, this.cartManager);
             updateChips();
         });
+
+        // Initial chips
         updateChips();
     }
 
@@ -414,6 +454,8 @@ class App {
         addToCartBtn?.addEventListener('click', () => {
             if (isOutOfStock) return;
             this.cartManager.addItem(product, quantity);
+            
+            // Animate button
             addToCartBtn.style.transform = 'scale(0.95)';
             setTimeout(() => {
                 addToCartBtn.style.transform = '';
@@ -423,6 +465,8 @@ class App {
 
     initCartPage() {
         this.renderCart();
+        
+        // Listen for cart updates
         document.addEventListener('cartUpdated', () => {
             this.renderCart();
         });
@@ -477,6 +521,8 @@ class App {
                 </div>
             </div>
         `).join('');
+
+        // Add event listeners
         container.querySelectorAll('.quantity-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const itemId = parseInt(btn.dataset.id);
@@ -499,8 +545,10 @@ class App {
                 this.cartManager.removeItem(itemId);
             });
         });
+
+        // Calculate totals
         const subtotal = this.cartManager.getTotalPrice();
-        const tax = subtotal * 0.1; 
+        const tax = subtotal * 0.1; // 10% tax
         const total = subtotal + tax;
 
         if (subtotalEl) subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
@@ -516,6 +564,7 @@ class App {
     }
 
     initSuccessPage() {
+        // Success page is mostly static, but we can add any animations here
         const successCard = document.querySelector('.success-card');
         if (successCard) {
             successCard.style.animation = 'fadeInUp 0.6s ease-out';
@@ -544,15 +593,14 @@ class App {
         });
     }
 }
-function startApp() {
-    handleSplashScreen();
-    onPageLoadTransitions();
-    interceptLinks();
-    animateSectionTitles();
-    new App();
-}
+
+// Initialize splash and app when DOM is ready
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', startApp);
+    document.addEventListener('DOMContentLoaded', () => {
+        handleSplashScreen();
+        new App();
+    });
 } else {
-    startApp();
+    handleSplashScreen();
+    new App();
 }

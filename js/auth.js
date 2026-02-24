@@ -4,6 +4,10 @@ const STORAGE_KEYS = {
 };
 
 const REDIRECT_DELAY_MS = 1800;
+
+/**
+ * @returns {Object|null} { name, email, isLoggedIn } or null
+ */
 function getCurrentUser() {
     try {
         const raw = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
@@ -14,9 +18,17 @@ function getCurrentUser() {
         return null;
     }
 }
+
+/**
+ * @returns {boolean}
+ */
 function isAuthenticated() {
     return getCurrentUser() !== null;
 }
+
+/**
+ * @param {Object} user { name, email }
+ */
 function setCurrentUser(user) {
     if (user) {
         const payload = { ...user, isLoggedIn: true };
@@ -39,6 +51,15 @@ function getUsers() {
 function setUsers(users) {
     localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
 }
+
+/**
+ * Register: save user, set currentUser (name, email, isLoggedIn: true), show success, redirect to Home.
+ * Prevents duplicate email.
+ * @param {string} name
+ * @param {string} email
+ * @param {string} password
+ * @returns {{ success: boolean, error?: string }}
+ */
 function registerUser(name, email, password) {
     const trimmedName = (name || '').trim();
     const trimmedEmail = (email || '').trim().toLowerCase();
@@ -71,6 +92,13 @@ function registerUser(name, email, password) {
     showSuccessMessageAndRedirect('Account created! Redirecting...', 'index.html');
     return { success: true };
 }
+
+/**
+ * Login: validate credentials, set currentUser, redirect to Home.
+ * @param {string} email
+ * @param {string} password
+ * @returns {{ success: boolean, error?: string }}
+ */
 function loginUser(email, password) {
     const trimmedEmail = (email || '').trim().toLowerCase();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
@@ -96,6 +124,10 @@ function loginUser(email, password) {
     showSuccessMessageAndRedirect('Welcome back! Redirecting...', redirectTo);
     return { success: true };
 }
+
+/**
+ * Logout: clear currentUser, optional confirmation animation, then redirect to Home.
+ */
 function logoutUser() {
     const btn = document.getElementById('logoutBtn');
     if (btn) {
@@ -142,6 +174,10 @@ function applyPageTransition(callback) {
     document.body.classList.add('page-transition-out');
     setTimeout(callback, 280);
 }
+
+/**
+ * Auth UI: navbar slot + form handlers (event listeners only).
+ */
 class AuthUI {
     constructor() {
         this.currentUser = getCurrentUser();
@@ -165,7 +201,7 @@ class AuthUI {
 
     renderNavAuthSlot() {
         const slot = document.getElementById('navAuthSlot');
-        if (!slot) return;
+        if (!slot) return; /* no navbar on login/register pages */
 
         slot.classList.add('nav-auth-transition');
         if (this.currentUser) {

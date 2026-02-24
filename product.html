@@ -40,11 +40,28 @@
             <div class="product-details-wrapper" id="productDetails">
                 <!-- Product details will be injected by JavaScript -->
             </div>
+                <!-- Smart Discovery Sections -->
+                <section id="similarProductsSection" class="smart-discovery-section" style="margin-top:2.5rem;"></section>
+                <section id="recentlyViewedSection" class="smart-discovery-section" style="margin-top:1.5rem;"></section>
         </div>
     </section>
 
     <script type="module" src="js/main.js"></script>
     <script type="module" src="js/buttonTop.js"></script>
+    <script type="module">
+        import { renderSmartDiscoverySections, trackProductView } from './js/smartDiscovery.js';
+        import ProductsManager from './js/products.js';
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            if (!productId) return;
+            const productsManager = new ProductsManager();
+            const product = productsManager.getProductById(productId);
+            if (!product) return;
+            trackProductView(product.id);
+            setTimeout(() => renderSmartDiscoverySections(product), 100);
+        });
+    </script>
 </body>
     <!-- Scroll To Top Button -->
     <button id="scrollTopBtn" class="scroll-top-btn" aria-label="Scroll to top" tabindex="0">

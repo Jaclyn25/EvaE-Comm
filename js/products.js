@@ -1,4 +1,3 @@
-import { showToast } from './toast.js';
 class ProductsManager {
         getWishlist() {
             try {
@@ -13,17 +12,12 @@ class ProductsManager {
         }
         toggleWishlist(id) {
             let wishlist = this.getWishlist();
-            const allProducts = this.products || [];
-            const product = allProducts.find(p => p.id === id);
             if (wishlist.includes(id)) {
                 wishlist = wishlist.filter(pid => pid !== id);
-                this.setWishlist(wishlist);
-                if (product) showToast({ message: `Removed ${product.name} from wishlist.`, type: 'warning' });
             } else {
                 wishlist.push(id);
-                this.setWishlist(wishlist);
-                if (product) showToast({ message: `Added ${product.name} to wishlist!`, type: 'success' });
             }
+            this.setWishlist(wishlist);
         }
     constructor() {
         this.products = this.getProductsData();
